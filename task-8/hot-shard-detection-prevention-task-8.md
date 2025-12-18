@@ -69,13 +69,33 @@ Balancer:
 
 ### 3.2 Изменение shard key
 
-Если нагрузка растёт:
+Если категория Electronics стабильно создает неравномерную нагрузку
+при добавлении category в shard key
 
 ```js
 { category: 1, _id: "hashed" }
 ```
 
-Только для новых коллекций или через resharding.
+Можно использовать подход Zone Sharding
+
+```js
+sh.addShardToZone("shard1", "electronics_zone")
+sh.addShardToZone("shard2", "electronics_zone")
+
+sh.updateZoneKeyRange(
+  "db.products",
+  { category: "Electronics", _id: MinKey },
+  { category: "Electronics", _id: MaxKey },
+  "electronics_zone"
+)
+```
+
+В таком случае новые Electronics документы будут жить на shard1 и shard2 
+и сразу попадать в эту изолированную зону и равномерно распределяться между шардами
+
+Это позволяет:
+- изолировать hot-категории
+- масштабировать только конкретные зоны
 
 ---
 
