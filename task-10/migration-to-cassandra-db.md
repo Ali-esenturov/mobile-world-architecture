@@ -2,22 +2,15 @@
 
 ## 10.1 Данные и требования к ним
 
-| Данные                  | Критичность целостности | Критичность latency |
-| ----------------------- | ----------------------- | ------------------- |
-| Активные корзины        | высокая                 | очень высокая       |
-| Создание заказов        | высокая                 | высокая             |
-| Остатки товаров         | высокая                 | высокая             |
-| Каталог товаров         | средняя                 | высокая             |
-| История заказов         | средняя                 | средняя             |
-| Пользовательские сессии | низкая                  | высокая             |
-
-Наиболее подходит для Cassandra:
+Наиболее подходит для Cassandra ввиду скорости и масштабируемости во время пиковых периодов:
 - Carts
-- Orders
-- Products (каталог)
-- Products stock (остатки)
+- User sessions
 
-## 10.2 Концептуальная модель данных для критичных сущностей
+Не подходят поскольку требуют транзакционной обработки (создание заказа и уменьшение остатков):
+- Orders
+- Products
+
+## 10.2 Концептуальная модель данных для подходящих сущностей и обоснование
 
 ### Carts
 ```js
@@ -36,78 +29,51 @@ carts (
 - нет hot partitions
 - масштабирование без reshuffle
 
-
-### Orders
+### User sessions
 ```js
-orders (
-  user_id TEXT,
-  order_date TIMESTAMP,
-  order_id UUID,
-  status TEXT,
-  total_sum DECIMAL,
-  PRIMARY KEY ((user_id), order_date, order_id)
+user_sessions (
+  session_id UUID,
+  created_at TIMESTAMP,
+  last_access TIMESTAMP,
+  data MAP<TEXT, TEXT>,
+  PRIMARY KEY (session_id)
 )
 ```
 
 Обоснование:
-- доступ по пользователю
-- временная сортировка
-- контролируемый рост партиций
+- равномерное распределение по session_id
+- быстрые read/write-heavy
+- нет бизнес-инвариантов, не нужна строгая ACID
 
-
-### Products (каталог, без остатков)
-```js
-products_catalog (
-  product_id UUID,
-  name TEXT,
-  category TEXT,
-  price DECIMAL,
-  attributes MAP<TEXT, TEXT>,
-  PRIMARY KEY ((product_id))
-)
-```
-
-Обоснование:
-- равномерный partition key
-- read-heavy
-- без бизнес-инвариантов
-
-
-### Products Stock (остатки)
-```js
-product_stock_by_geo (
-  product_id UUID,
-  geo TEXT,
-  available INT,
-  reserved INT,
-  PRIMARY KEY ((product_id), geo)
-)
-```
-
-Обоснование:
-- операции по конкретному товару
-- ограниченное число geo
 
 ## 10.3 Стратегии обеспечения целостности
 
-Hinted Handoff используем для:
-- Carts
+### Carts
+
+Выбранная стратегия:
+- Consistency Level: LOCAL_QUORUM + Read Repair + Hinted Handoff
+- Anti-Entropy Repair — опционально
 
 Почему:
-- минимальный latency
+- Потеря актуальной корзины = потеря выручки → высокая вероятность актуальных данных важнее минимального latency
+- LOCAL_QUORUM обеспечивает ~99% актуальности при чтении/записи
+- Read Repair и Hinted Handoff помогают исправлять расхождения и не терять обновления при сбоях
+- Anti-Entropy Repair для Carts не критичен, так как данные short-lived
 
-Read Repair используем для:
-- Products catalog
+Компромисс:
+- Более высокая нагрузка на latency при записи и чтении, но критично для бизнеса.
+
+### User sessions
+
+Выбранная стратегия:
+- Consistency Level: ONE + Hinted Handoff
+- Read Repair и Anti-Entropy Repair — не используем
 
 Почему:
-- read-heavy
-- можно чинить данные при чтении
+- eventual consistency допустима
+- основная цель — минимальный latency и быстрая обработка read/write-heavy операций
+- Hinted Handoff защищает от потери сессий при временных сбоях узлов.
 
-Anti-Entropy Repair используем для:
-- Orders
-- Products stock (остатки)
-
-Почему
-- критичная целостность
-- допустим фоновый repair
-- используется по расписанию
+Компромисс:
+- Возможна небольшая несогласованность между репликами, но это допустимо
+- Максимальная скорость и минимальное время отклика
