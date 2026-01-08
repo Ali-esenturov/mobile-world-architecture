@@ -1,0 +1,61 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36" version="29.2.7">
+  <diagram name="MongoDB Cluster" id="t7UiYUf708d4slNB7YpS">
+    <mxGraphModel dx="2207" dy="783" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bc3cykJMNmXMaLhhWoLy-69" edge="1" parent="1" source="bc3cykJMNmXMaLhhWoLy-43" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="bc3cykJMNmXMaLhhWoLy-44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zEHgM8HLgVsQTYaDGBNi-2" edge="1" parent="1" source="bc3cykJMNmXMaLhhWoLy-43" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="zEHgM8HLgVsQTYaDGBNi-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bc3cykJMNmXMaLhhWoLy-43" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" value="pymongo-api" vertex="1">
+          <mxGeometry height="60" width="120" x="-730" y="315" as="geometry" />
+        </mxCell>
+        <mxCell id="bc3cykJMNmXMaLhhWoLy-58" edge="1" parent="1" source="bc3cykJMNmXMaLhhWoLy-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="bc3cykJMNmXMaLhhWoLy-45" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bc3cykJMNmXMaLhhWoLy-59" edge="1" parent="1" source="bc3cykJMNmXMaLhhWoLy-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="zEHgM8HLgVsQTYaDGBNi-9">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-290" y="345" />
+              <mxPoint x="-290" y="180" />
+            </Array>
+            <mxPoint x="-180" y="180.0666666666666" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bc3cykJMNmXMaLhhWoLy-44" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcd28;strokeColor=#d79b00;gradientColor=#ffa500;" value="mongo-router" vertex="1">
+          <mxGeometry height="60" width="120" x="-540" y="315" as="geometry" />
+        </mxCell>
+        <mxCell id="bc3cykJMNmXMaLhhWoLy-45" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;gradientColor=#ffd966;" value="config server&lt;br&gt;configSrv" vertex="1">
+          <mxGeometry height="130" width="110" x="-535" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bc3cykJMNmXMaLhhWoLy-47" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="mongo shard-1" vertex="1">
+          <mxGeometry height="30" width="60" x="-180" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="bc3cykJMNmXMaLhhWoLy-60" edge="1" parent="1" source="bc3cykJMNmXMaLhhWoLy-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" target="zEHgM8HLgVsQTYaDGBNi-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-290" y="345" />
+              <mxPoint x="-290" y="490" />
+            </Array>
+            <mxPoint x="-179.93999999999983" y="490.3799999999999" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zEHgM8HLgVsQTYaDGBNi-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;gradientColor=#7ea6e0;strokeColor=#6c8ebf;" value="redis" vertex="1">
+          <mxGeometry height="60" width="120" x="-730" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="zEHgM8HLgVsQTYaDGBNi-3" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#d5e8d4;gradientColor=#97d077;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="100" width="80" x="-190" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="zEHgM8HLgVsQTYaDGBNi-8" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="mongo shard-2" vertex="1">
+          <mxGeometry height="30" width="60" x="-180" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="zEHgM8HLgVsQTYaDGBNi-9" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#d5e8d4;gradientColor=#97d077;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="100" width="80" x="-190" y="130" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
